@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
-    <script src="js/main.js" type="module" defer />
+    <link rel="stylesheet" href="auth.css">
+    <script type="module" src="js/main.js"></script>
     <title>Wizytówka</title>
 </head>
 
@@ -14,6 +15,13 @@
     <nav class="nav">
         <h4>F.N.</h4>
         <div>
+            <div id="userSession" class="user-session">
+                <button id="loginBtn" type="button">Zaloguj się</button>
+                <div id="userInfo" class="user-info hidden">
+                    <span>Zalogowany: <strong id="loggedUsername">--</strong></span>
+                    <button id="logoutBtn" type="button">Wyloguj</button>
+                </div>
+            </div>
             <button class="theme-button">Motyw</button>
             <a href="#about-me">O mnie</a>
             <a href="#projects">Projekty</a>
@@ -77,16 +85,9 @@
             </article>
         </section>
         <section class="mid-wrapper">
-            <aside id="links" class="links">
+            <aside id="links" class="links hidden">
                 <h3>Linki</h3>
-                <ul class="links-list">
-                    <li><a href="https://github.com/lemonjuiceexe" target="_blank" rel="noopener noreferrer">GitHub</a>
-                    </li>
-                    <li><a href="https://www.linkedin.com/in/franciszekniwicki/" target="_blank"
-                            rel="noopener noreferrer">LinkedIn</a></li>
-                    <li><a href="https://developer.mozilla.org/en-US/" target="_blank" rel="noopener noreferrer">MDN Web
-                            Docs</a></li>
-                </ul>
+                <ul class="links-list"></ul>
                 <form class="links-form">
                     <label for="url">URL:</label>
                     <input type="text" id="url" placeholder="Podaj URL">

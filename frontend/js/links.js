@@ -18,6 +18,8 @@
  * @param {string} urlString
  * @returns {string|null}
  */
+import { onLoginSuccess, onLogoutSuccess } from "./auth.js";
+
 function sanitizeUrl(urlString) {
   // .trim() usuwa białe znaki (spacje, tabulatory, nowe linie) z początku i końca tekstu
   const trimmed = urlString.trim();
@@ -96,12 +98,23 @@ function deleteLink(name) {
 }
 
 export function initLinks() {
+  const panel = document.querySelector("#links");
+  const list = document.querySelector(".links-list");
   const form = document.querySelector(".links-form");
+
   if (form) {
     form.addEventListener("submit", addLink);
   }
 
-  renderLinks();
+  onLoginSuccess(() => {
+    if (panel) panel.classList.remove("hidden");
+    renderLinks();
+  });
+
+  onLogoutSuccess(() => {
+    if (panel) panel.classList.add("hidden");
+    if (list) list.textContent = "";
+  });
 }
 
 function addLink(event) {
