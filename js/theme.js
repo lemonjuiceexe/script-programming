@@ -10,12 +10,12 @@
 
 export function initTheme() {
   document.querySelector(".theme-button").addEventListener("click", toggleTheme);
-  // TODO: Zaimplementuj obsługę motywu i trwałość w localStorage
   const initialTheme = localStorage.getItem("theme");
-  document.querySelector("body").classList.toggle("dark", initialTheme === "dark");
+  if(initialTheme === "dark" && !document.querySelector("body").classList.contains("dark"))
+    document.querySelector("body").classList.add("dark");
 }
 
-export function toggleTheme(){
-  document.querySelector("body").classList.toggle("dark");
-  localStorage.setItem("theme", localStorage.getItem("theme") === "light" ? "dark" : "light");
+export function toggleTheme() {
+  const isDark = document.body.classList.toggle("dark");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
 }
