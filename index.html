@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css">
+    <script src="js/main.js" type="module" defer />
+    <title>Wizytówka</title>
+</head>
+
+<body class="">
+    <nav class="nav">
+        <h4>F.N.</h4>
+        <div>
+            <button class="theme-button">Motyw</button>
+            <a href="#about-me">O mnie</a>
+            <a href="#projects">Projekty</a>
+            <a href="#links">Linki</a>
+            <a href="#contact">Kontakt</a>
+        </div>
+    </nav>
+    <main class="wrapper">
+        <section class="hero">
+            <h1>Franciszek Niwicki</h1>
+            <h2>Programista, student cyberbezpieczeństwa</h2>
+        </section>
+        <section id="about-me" class="about-me">
+            <h3>O mnie</h3>
+            <article class="about-me-content">
+                <img src="https://placecats.com/200/300" alt="Franciszek Niwicki" class="profile-image">
+                <p>Jestem studentem cyberbezpieczeństwa na AGH. Ukończyłem ZSŁ w Krakowie na kierunku technik
+                    programista. Pracuję jako programista Node.js w Motorola Solutions.
+                </p>
+            </article>
+        </section>
+        <section id="projects" class="projects">
+            <h3>Projekty</h3>
+            <article class="projects-content">
+                <div class="project">
+                    <img src="assets/weather.svg" alt="Ikona projektu Weather" class="project-icon">
+                    <h4>Weather</h4>
+                    <p class="project-desc">Aplikacja wyświetlająca aktualną pogodę w formie czytelnego wykresu.</p>
+                    <div class="project-stack">
+                        <span class="tech-pill">React.js</span>
+                    </div>
+                </div>
+                <div class="project">
+                    <img src="assets/server.svg" alt="Ikona projektu File server" class="project-icon">
+                    <h4>File server</h4>
+                    <p class="project-desc">Serwer plików umożliwiający przesyłanie, pobieranie oraz edytowanie w
+                        przeglądarce plików przez zalogowanych użytkowników.</p>
+                    <div class="project-stack">
+                        <span class="tech-pill">Express.js</span>
+                        <span class="tech-pill">Handlebars</span>
+                    </div>
+                </div>
+                <div class="project">
+                    <img src="assets/traffic.svg" alt="Ikona projektu Traffic simulator" class="project-icon">
+                    <h4>Traffic simulator</h4>
+                    <p class="project-desc">Symulator ruchu drogowego z zaimplementownanym algorytmem sterowania ruchem.
+                    </p>
+                    <div class="project-stack">
+                        <span class="tech-pill">TypeScript</span>
+                    </div>
+                </div>
+                <div class="project">
+                    <img src="assets/chess.svg" alt="Ikona projektu Chess" class="project-icon">
+                    <h4>Chess</h4>
+                    <p class="project-desc">Gra w szachy</p>
+                    <div class="project-stack">
+                        <span class="tech-pill">Unity</span>
+                        <span class="tech-pill">C#</span>
+                    </div>
+                </div>
+            </article>
+        </section>
+        <section class="mid-wrapper">
+            <aside id="links" class="links">
+                <h3>Linki</h3>
+                <ul class="links-list">
+                    <li><a href="https://github.com/lemonjuiceexe" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    </li>
+                    <li><a href="https://www.linkedin.com/in/franciszekniwicki/" target="_blank"
+                            rel="noopener noreferrer">LinkedIn</a></li>
+                    <li><a href="https://developer.mozilla.org/en-US/" target="_blank" rel="noopener noreferrer">MDN Web
+                            Docs</a></li>
+                </ul>
+                <form class="links-form">
+                    <label for="url">URL:</label>
+                    <input type="text" id="url" placeholder="Podaj URL">
+                    <label for="alias">Alias:</label>
+                    <input type="text" id="alias" placeholder="Podaj alias dla URL">
+                    <button class="links-submit">Dodaj</button>    
+                </form>
+            </aside>
+            <aside id="contact" class="contact">
+                <h3>Kontakt</h3>
+                <form method="post">
+                    <label for="name">Imię:</label>
+                    <input type="text" id="name" name="name" placeholder="Wpisz swoje imię" required>
+                    <label for="surname">Nazwisko:</label>
+                    <input type="text" id="surname" name="surname" placeholder="Wpisz swoje nazwisko" required>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="lis@agh.edu.pl" required>
+                    <label for="message">Wiadomość:</label>
+                    <textarea id="message" name="message" placeholder="Wpisz swoją wiadomość" minlength="10"
+                        required></textarea>
+                    <button type="submit">Wyślij</button>
+                </form>
+            </aside>
+        </section>
+        <section class="mid-wrapper">
+            <section class="weather" id="weather-box">
+                <p class="weather-loading">loading...</p>
+                <div class="weather-content hidden">
+                    <h3>Pogoda <span class="city"></span></h3>  
+                    <p class="temperature"></p>
+                    <p class="pressure"></p>
+                    <p class="wind"></p>  
+                </div>
+            </section>
+            <section class="calendar" id="calendar-box">
+                <p class="calendar-content"></p>
+            </section>
+        </section>
+    </main>
+</body>
+
+</html>
