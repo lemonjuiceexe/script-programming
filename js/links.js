@@ -43,12 +43,65 @@ function sanitizeUrl(urlString) {
   }
 }
 
+const STORAGE_KEY = "links";
+
+const DEFAULT_LINKS = [
+  { name: "GitHub", url: "https://github.com/lemonjuiceexe" },
+  { name: "LinkedIn", url: "https://www.linkedin.com/in/franciszekniwicki/" },
+  { name: "MDN Web Docs", url: "https://developer.mozilla.org/en-US/" },
+];
+
+function loadLinks() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored === null) {
+    return DEFAULT_LINKS;
+  }
+  return JSON.parse(stored);
+}
+
+function saveLinks(links) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(links));
+}
+
+let links = loadLinks();
+
+function renderLinks() {
+  const list = document.querySelector(".links-list");
+
+  list.textContent = "";
+
+  links.forEach((item) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = item.url;
+    a.textContent = item.name;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "links-delete-btn";
+    deleteBtn.textContent = "Usuń";
+    deleteBtn.addEventListener("click", () => deleteLink(item.name));
+
+    li.append(a, deleteBtn);
+    list.append(li);
+  });
+}
+
+function deleteLink(name) {
+  links = links.filter((item) => item.name !== name);
+  saveLinks(links);
+  renderLinks();
+}
 
 export function initLinks() {
   const form = document.querySelector(".links-form");
   if (form) {
     form.addEventListener("submit", addLink);
   }
+
+  renderLinks();
 }
 
 function addLink(event) {
@@ -81,15 +134,9 @@ function addLink(event) {
 
   errorElement.textContent = "";
 
-  const link = document.createElement("a");
-  link.href = url;
-  link.textContent = alias.trim();
-  link.target = "_blank";
-  link.rel = "noopener noreferrer";
-
-  const listItem = document.createElement("li");
-  listItem.appendChild(link);
-  document.querySelector(".links-list").appendChild(listItem);
+  links.push({ name: alias.trim(), url });
+  saveLinks(links);
+  renderLinks();
 
   event.target.reset();
 }
