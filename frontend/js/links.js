@@ -78,6 +78,7 @@ async function loadLinks() {
   try {
     links = await linksApi.getAll();
     renderLinks();
+    if (errorElement) errorElement.textContent = "";
   } catch (err) {
     if (errorElement) errorElement.textContent = err.message;
   }
@@ -94,6 +95,7 @@ async function handleDeleteLink(event) {
     await linksApi.delete(linkId);
     links = links.filter((l) => l.id !== Number(linkId));
     renderLinks();
+    if (errorElement) errorElement.textContent = "";
   } catch (err) {
     if (errorElement) errorElement.textContent = err.message;
   }
