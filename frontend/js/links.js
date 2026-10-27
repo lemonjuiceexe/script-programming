@@ -19,6 +19,9 @@
  * @returns {string|null}
  */
 import { onLoginSuccess, onLogoutSuccess } from "./auth.js";
+import { linksApi } from "./api.js";
+
+let links = [];
 
 function sanitizeUrl(urlString) {
   // .trim() usuwa białe znaki (spacje, tabulatory, nowe linie) z początku i końca tekstu
@@ -45,30 +48,9 @@ function sanitizeUrl(urlString) {
   }
 }
 
-const STORAGE_KEY = "links";
-
-const DEFAULT_LINKS = [
-  { name: "GitHub", url: "https://github.com/lemonjuiceexe" },
-  { name: "LinkedIn", url: "https://www.linkedin.com/in/franciszekniwicki/" },
-  { name: "MDN Web Docs", url: "https://developer.mozilla.org/en-US/" },
-];
-
-function loadLinks() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === null) {
-    return DEFAULT_LINKS;
-  }
-  return JSON.parse(stored);
-}
-
-function saveLinks(links) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(links));
-}
-
-let links = loadLinks();
-
 function renderLinks() {
   const list = document.querySelector(".links-list");
+  if (!list) return;
 
   list.textContent = "";
 
@@ -76,7 +58,7 @@ function renderLinks() {
     const li = document.createElement("li");
     const a = document.createElement("a");
     a.href = item.url;
-    a.textContent = item.name;
+    a.textContent = item.title;
     a.target = "_blank";
     a.rel = "noopener noreferrer";
 
@@ -84,17 +66,37 @@ function renderLinks() {
     deleteBtn.type = "button";
     deleteBtn.className = "links-delete-btn";
     deleteBtn.textContent = "Usuń";
-    deleteBtn.addEventListener("click", () => deleteLink(item.name));
+    deleteBtn.dataset.id = item.id;
 
     li.append(a, deleteBtn);
     list.append(li);
   });
 }
 
-function deleteLink(name) {
-  links = links.filter((item) => item.name !== name);
-  saveLinks(links);
-  renderLinks();
+async function loadLinks() {
+  const errorElement = document.querySelector(".links-error");
+  try {
+    links = await linksApi.getAll();
+    renderLinks();
+  } catch (err) {
+    if (errorElement) errorElement.textContent = err.message;
+  }
+}
+
+async function handleDeleteLink(event) {
+  const deleteBtn = event.target.closest(".links-delete-btn");
+  if (!deleteBtn) return;
+
+  const linkId = deleteBtn.dataset.id;
+  const errorElement = document.querySelector(".links-error");
+
+  try {
+    await linksApi.delete(linkId);
+    links = links.filter((l) => l.id !== Number(linkId));
+    renderLinks();
+  } catch (err) {
+    if (errorElement) errorElement.textContent = err.message;
+  }
 }
 
 export function initLinks() {
@@ -106,18 +108,23 @@ export function initLinks() {
     form.addEventListener("submit", addLink);
   }
 
+  if (list) {
+    list.addEventListener("click", handleDeleteLink);
+  }
+
   onLoginSuccess(() => {
     if (panel) panel.classList.remove("hidden");
-    renderLinks();
+    loadLinks();
   });
 
   onLogoutSuccess(() => {
     if (panel) panel.classList.add("hidden");
+    links = [];
     if (list) list.textContent = "";
   });
 }
 
-function addLink(event) {
+async function addLink(event) {
   event.preventDefault();
 
   const urlInput = document.querySelector("#url");
@@ -128,7 +135,7 @@ function addLink(event) {
   const alias = aliasInput.value;
 
   const isUrlValid = ![null, undefined].includes(url);
-  const isAliasValid = alias.trim().length >= 3;
+  const isAliasValid = alias.replace(/\s/g, "").length >= 3;
 
   urlInput.classList.toggle("error", !isUrlValid);
   aliasInput.classList.toggle("error", !isAliasValid);
@@ -147,9 +154,12 @@ function addLink(event) {
 
   errorElement.textContent = "";
 
-  links.push({ name: alias.trim(), url });
-  saveLinks(links);
-  renderLinks();
-
-  event.target.reset();
+  try {
+    const created = await linksApi.create({ title: alias.trim(), url });
+    links.push(created);
+    renderLinks();
+    event.target.reset();
+  } catch (err) {
+    errorElement.textContent = err.message;
+  }
 }

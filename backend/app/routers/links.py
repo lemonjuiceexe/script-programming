@@ -18,27 +18,49 @@ from app.schemas.link import LinkCreate, LinkResponse
 router = APIRouter(prefix="/api/links", tags=["Links"])
 
 
-# TODO (Zadanie 3): Zaimplementuj operacje CRUD z ochroną przed BOLA:
-#
-# 1. GET /api/links
-#    - Wstrzyknij current_user: User = Depends(get_current_user) oraz db: Session = Depends(get_db)
-#    - Wykonaj zapytanie: select(Link).where(Link.owner_id == current_user.id)
-#    - Zwróć list[LinkResponse] ze statusem 200 OK
-#
-# 2. POST /api/links
-#    - Przyjmij link_data: LinkCreate, current_user oraz db
-#    - Utwórz instancję Link przypisując owner_id = current_user.id
-#    - Zapisz w bazie (db.add, db.commit, db.refresh)
-#    - Zwróć LinkResponse ze statusem 201 Created
-#
-# 3. DELETE /api/links/{link_id}
-#    - Pobierz obiekt: link = db.get(Link, link_id)
-#    - Jeśli brak obiektu: rzuć HTTPException(status_code=404, detail="Nie znaleziono odnośnika")
-#    - 🛡️ Kluczowa obrona BOLA:
-#      if link.owner_id != current_user.id:
-#          raise HTTPException(
-#              status_code=status.HTTP_403_FORBIDDEN,
-#              detail="Brak uprawnień do tego zasobu (Naruszenie BOLA/IDOR)"
-#          )
-#    - Usuń obiekt (db.delete, db.commit)
-#    - Zwróć Response(status_code=status.HTTP_204_NO_CONTENT)
+@router.get("", response_model=list[LinkResponse], status_code=status.HTTP_200_OK)
+def get_links(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+) -> list[Link]:
+    stmt = select(Link).where(Link.owner_id == current_user.id)
+    return list(db.scalars(stmt).all())
+
+
+@router.post("", response_model=LinkResponse, status_code=status.HTTP_201_CREATED)
+def create_link(
+    link_data: LinkCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+) -> Link:
+    new_link = Link(
+        title=link_data.title,
+        url=str(link_data.url),
+        owner_id=current_user.id
+    )
+    db.add(new_link)
+    db.commit()
+    db.refresh(new_link)
+    return new_link
+
+
+@router.delete("/{link_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_link(
+    link_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    link = db.get(Link, link_id)
+    if not link:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Nie znaleziono odnośnika"
+        )
+    if link.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Brak uprawnień do tego zasobu (Naruszenie BOLA/IDOR)"
+        )
+    db.delete(link)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
