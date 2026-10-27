@@ -45,12 +45,51 @@ function sanitizeUrl(urlString) {
 
 
 export function initLinks() {
-  // TODO: Zaimplementuj obsługę formularza, listy i delegację zdarzeń w panelu bocznym
-  document.querySelector(".links-submit").addEventListener(onclick, addLink);
+  const form = document.querySelector(".links-form");
+  if (form) {
+    form.addEventListener("submit", addLink);
+  }
 }
-function addLink(){
-  const url = sanitizeUrl(document.querySelector("#url").textContent);
-  const alias = document.querySelector("#alias").textContent;
 
-  document.querySelector("links-list").appendChild(document.createElement("a").textContent(alias));
+function addLink(event) {
+  event.preventDefault();
+
+  const urlInput = document.querySelector("#url");
+  const aliasInput = document.querySelector("#alias");
+  const errorElement = document.querySelector(".links-error");
+
+  const url = sanitizeUrl(urlInput.value);
+  const alias = aliasInput.value;
+
+  const isUrlValid = ![null, undefined].includes(url);
+  const isAliasValid = alias.trim().length >= 3;
+
+  urlInput.classList.toggle("error", !isUrlValid);
+  aliasInput.classList.toggle("error", !isAliasValid);
+
+  if (!isUrlValid || !isAliasValid) {
+    if (!isUrlValid && !isAliasValid) {
+      errorElement.textContent = "Podaj poprawny URL oraz nazwę (min. 3 znaki).";
+    } else if (!isUrlValid) {
+      errorElement.textContent = "Podaj poprawny adres URL (http:// lub https://).";
+    } else {
+      errorElement.textContent = "Nazwa musi mieć co najmniej 3 znaki (bez spacji).";
+    }
+
+    return;
+  }
+
+  errorElement.textContent = "";
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.textContent = alias.trim();
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+
+  const listItem = document.createElement("li");
+  listItem.appendChild(link);
+  document.querySelector(".links-list").appendChild(listItem);
+
+  event.target.reset();
 }

@@ -12,8 +12,7 @@ export function initTheme() {
   document.querySelector(".theme-button").addEventListener("click", toggleTheme);
   // TODO: Zaimplementuj obsługę motywu i trwałość w localStorage
   const initialTheme = localStorage.getItem("theme");
-  if(initialTheme === "dark" && !document.querySelector("body").classList.contains("dark"))
-    document.querySelector("body").classList.add("dark");
+  document.querySelector("body").classList.toggle("dark", initialTheme === "dark");
 }
 
 export function toggleTheme(){

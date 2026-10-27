@@ -343,6 +343,21 @@ form button:focus-visible{
     outline-offset: 2px;
 }
 
+form input.error{
+    border-color: #d93838;
+}
+
+form input.error:focus{
+    border-color: #d93838;
+    outline-color: #d93838;
+}
+
+.links-error{
+    color: #d93838;
+    font-size: 0.85rem;
+    margin-top: 0.35rem;
+}
+
 .weather,
 .calendar{
     width: 100%;
