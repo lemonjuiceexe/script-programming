@@ -1,0 +1,39 @@
+
+# Ustawienie wersji konfiguracji Vagranta (wersja 2 to standard dla VirtualBoxa)
+Vagrant.configure("2") do |config|
+
+  # Określenie obrazu systemu operacyjnego (boxa) - Ubuntu 22.04 LTS
+  config.vm.box = "ubuntu/jammy64"
+
+  # Nazwa hosta maszyny wirtualnej (przydatna w sieci lokalnej lub do identyfikacji)
+  config.vm.hostname = "shell-lab"
+
+  # Konfiguracja sieci prywatnej - maszyna dostaje adres IP z DHCP
+  # config.vm.network "private_network", type: "dhcp"
+
+  # Konfiguracja dostawcy maszyn wirtualnych - w tym przypadku VirtualBox
+  config.vm.provider "virtualbox" do |vb|
+    # Przydzielenie 2048 MB pamięci RAM do maszyny
+    vb.memory = "2048"
+    # Przydzielenie 2 rdzeni procesora
+    vb.cpus = 2
+  
+  # Wyłączenie domyślnego /vagrant
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # Udostępninei folderu Vagranta do maszyny wirtualnej
+  # Katalog lab ma typ vboxsf (VirtualBox Shared Folders) co powoduje, że
+  # wszystkie pliki mają chmod 770 i należą do użytkownika vagrant i grupy vagrant
+  # nie  mozna zmienic tych uprawnień ani właściciela przez chmod czy chown
+  config.vm.synced_folder "./shared_files", "/home/vagrant/shared"
+  
+  end
+
+  # Provisioning - automatyczne uruchomienie skryptu shellowego po utworzeniu maszyny
+  config.vm.provision "shell", path: "provision.sh"
+  # lub
+  # config.vm.provision "shell", path: "provision.sh", run: "always"
+
+# Zakończenie bloku konfiguracji
+end
+

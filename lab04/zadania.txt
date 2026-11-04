@@ -1,0 +1,37 @@
+Zadanie 1.
+Napisz skrypt, który:
+a) w katalogu domowym utworzy katalog o nazwie Zad1, a następnie utworzy w nim pliki:
+	- plik1
+	- etc.txt
+	- abc.txt
+b) wpisze do pliku abc.txt zdanie: "Adam Mickiewicz wielkim poetą był".
+c) zmieni uprawnienia pliku plik1 na 640 (zapis oktalny).
+d) umieści w pliku etc.txt listę wszystkich plików i katalogów z katalogu /etc.
+e) skopiuje abc.txt do katalogu domowego pod nazwą zad1.txt.
+f) usunie plik plik1.
+
+Zadanie 2.
+Napisz skrypt, który przetworzy plik panTadeusz.txt:
+a) wyświetli liczbę wierszy i słów w pliku.
+b) wyświetli, ile razy występuje słowo "Litwa" w różnych odmianach (Litwo, Litwa, Litwie, Litwę...).
+c) wyświetli 20 najczęściej występujących słów w tekście zaczynających się od wielkiej litery (wraz z liczbą ich wystąpień).
+d) wyświetli ponumerowane wiersze zawierające słowo "Ojczyzna" w różnych odmianach i zamieni litery tego słowa (lub cały wiersz) na wielkie.
+
+Zadanie 3.
+Napisz skrypt, który wczyta plik "przykladowy_log.log" zawierający serię wpisów w formacie:
+Sep 17 03:45:41 host1.local: alice 192.168.97.181
+oraz:
+a) wyświetli na ekranie każdy wpis w sformatowanej postaci:
+timestamp: <timestamp>, host: <machine>, user: <user>, adres_ip: <ip>;
+b) zliczy i wyświetli, ile razy dany użytkownik wystąpił w całym pliku (posortowane od najczęstszego).
+
+Zadanie 4.
+Napisz skrypt audytowy, który przyjmuje 2 parametry wywołania: <nazwa_katalogu> i <raport_file>:
+a) sprawdzi poprawność wywołania (czy przekazano dokładnie 2 argumenty i czy wskazany katalog istnieje).
+b) we wskazanym katalogu wyszuka rekurencyjnie wszystkie pliki z rozszerzeniem różnym od .sh.
+c) sprawdzi, czy znalezione pliki mają ustawiony atrybut wykonywalności (flaga x).
+d) jeśli plik posiada atrybut x – usunie to uprawnienie.
+e) wygeneruje raport w formacie CSV z nagłówkiem:
+nazwa_pliku,rozmiar_kB,mial_x
+gdzie kolumna mial_x przyjmuje wartość TAK lub NIE (w zależności od tego, czy plik pierwotnie miał flagę x).
+f) po wygenerowaniu raportu wyświetli na ekranie podsumowanie: liczbę zbadanych plików oraz liczbę plików, z których usunięto atrybut x.

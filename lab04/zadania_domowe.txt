@@ -1,0 +1,11 @@
+Zadanie 5.
+Napisz skrypt, który dzieli plik panTadeusz.txt na 12 plików zawierających 12 ksiąg poematu.
+
+Zadanie 6.
+Napisz skrypt, który generuje plik raport_systemowy.csv z nagłówkiem i metrykami systemowymi w kolejnych kolumnach:
+- TIMESTAMP - czas w formacie: date "+%a %Y-%m-%d %H:%M:%S"
+- CPU_LOAD  - obciążenie średnie z ostatniej minuty (Load Average 1 min)
+- MEM_USED  - ilość zajętej pamięci RAM (w MB)
+- MEM_FREE  - ilość wolnej pamięci RAM (w MB)
+- USERS     - lista aktualnie zalogowanych unikalnych użytkowników (rozdzielona spacjami)
+- TOP_PROC  - lista 5 procesów zużywających najwięcej CPU (spłaszczona lub ujęta w cudzysłów, aby nie rozbijać formatu wiersza CSV)
